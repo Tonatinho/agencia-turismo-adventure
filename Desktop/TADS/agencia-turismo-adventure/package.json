@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "scripts": {
+"scripts": {
     "dev": "tsx watch backend/servidor.ts",
     "build": "vite build && esbuild backend/servidor.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/index.js",
     "start": "node dist/index.js",
@@ -12,8 +12,10 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
     "prisma:deploy": "prisma migrate deploy",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:e2e": "playwright test"
   },
+  
   "dependencies": {
     "@prisma/client": "^6.16.2",
     "bcryptjs": "^3.0.3",
@@ -29,6 +31,7 @@
   "devDependencies": {
     "@commitlint/cli": "^21.2.2",
     "@commitlint/config-conventional": "^21.2.2",
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/vite": "^4.1.14",
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "4.17.21",
@@ -45,3 +48,4 @@
     "vite": "^7.1.7"
   }
 }
+
