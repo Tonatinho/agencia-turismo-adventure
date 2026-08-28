@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  user
+  admin
+}
+
+enum TipoUsuario {
+  cliente
+  admin
+}
+
+enum StatusReserva {
+  pendente
+  confirmada
+  cancelada
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  openId       String   @unique @map("openId") @db.VarChar(64)
+  name         String?  @db.Text
+  email        String?  @db.VarChar(320)
+  loginMethod  String?  @db.VarChar(64)
+  role         UserRole @default(user)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  lastSignedIn DateTime @default(now())
+
+  @@map("users")
+}
+
+model Usuario {
+  id        Int         @id @default(autoincrement())
+  nome      String
+  email     String      @unique
+  senha     String      @db.VarChar(255)
+  tipo      TipoUsuario @default(cliente)
+  ativo     Boolean     @default(true)
+  reservas  Reserva[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@map("usuarios")
+}
+
+model Pacote {
+  id          Int       @id @default(autoincrement())
+  titulo      String
+  descricao   String    @db.Text
+  destino     String
+  preco       Decimal   @db.Decimal(10, 2)
+  duracaoDias Int
+  imagem      String?
+  destaque    Boolean   @default(false)
+  disponivel  Boolean   @default(true)
+  reservas    Reserva[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("pacotes")
+}
+
+model Reserva {
+  id                 Int           @id @default(autoincrement())
+  usuarioId          Int
+  pacoteId           Int
+  dataViagem         DateTime
+  dataReserva        DateTime      @default(now())
+  quantidadePessoas  Int           @default(1)
+  status             StatusReserva @default(pendente)
+  observacoes        String?       @db.Text
+  usuario            Usuario       @relation(fields: [usuarioId], references: [id])
+  pacote             Pacote        @relation(fields: [pacoteId], references: [id])
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  @@index([usuarioId])
+  @@index([pacoteId])
+  @@map("reservas")
+}
