@@ -2,7 +2,6 @@ export type Usuario = { id: number; nome: string; email: string; tipo: "cliente"
 export type Pacote = { id: number; titulo: string; descricao: string; destino: string; preco: string | number; duracaoDias: number; imagem?: string | null; destaque: boolean; disponivel: boolean };
 export type Reserva = { id: number; usuarioId: number; pacoteId: number; dataViagem: string; dataReserva: string; quantidadePessoas: number; status: "pendente" | "confirmada" | "cancelada"; observacoes?: string | null };
 
-/** Faz uma chamada para o backend e transforma a resposta em JSON. */
 async function requisitar<T>(caminho: string, opcoes: RequestInit = {}): Promise<T> {
   const resposta = await fetch(caminho, { ...opcoes, credentials: "include", headers: { "Content-Type": "application/json", ...(opcoes.headers || {}) } });
   const dados = await resposta.json().catch(() => ({}));
@@ -10,7 +9,6 @@ async function requisitar<T>(caminho: string, opcoes: RequestInit = {}): Promise
   return dados as T;
 }
 
-/** Reúne as chamadas usadas pelas páginas do sistema. */
 export const api = {
   usuarioAtual: () => requisitar<{ usuario: Usuario }>("/api/usuarios/me"),
   entrar: (email: string, senha: string) => requisitar<{ usuario: Usuario }>("/api/usuarios/login", { method: "POST", body: JSON.stringify({ email, senha }) }),

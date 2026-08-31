@@ -10,7 +10,6 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  /** Envia os dados de login ou cadastro conforme a opção escolhida. */
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setError(""); setLoading(true);
     const data = new FormData(event.currentTarget);

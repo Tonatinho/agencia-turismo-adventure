@@ -10,12 +10,10 @@ const senhaAdministrador = process.env.ADMIN_DEFAULT_PASSWORD || "Adventure@2026
 type UsuarioLocal = Awaited<ReturnType<typeof prisma.usuario.findUnique>>;
 type RequisicaoAutenticada = Request & { usuario?: NonNullable<UsuarioLocal> };
 
-/** Envia uma resposta de erro padronizada para o navegador. */
 function enviarErro(resposta: Response, status: number, mensagem: string) {
   return resposta.status(status).json({ error: mensagem });
 }
 
-/** Cria o cookie que mantém o usuário conectado por sete dias. */
 async function criarSessao(usuario: NonNullable<UsuarioLocal>, resposta: Response) {
   const token = await new SignJWT({ tipo: usuario.tipo, email: usuario.email })
     .setProtectedHeader({ alg: "HS256" })
@@ -32,7 +30,6 @@ async function criarSessao(usuario: NonNullable<UsuarioLocal>, resposta: Respons
   });
 }
 
-/** Confere o cookie da sessão e coloca o usuário na requisição. */
 async function verificarLogin(requisicao: RequisicaoAutenticada, resposta: Response, proximo: () => void) {
   const token = requisicao.cookies?.[NOME_COOKIE];
   if (!token) return enviarErro(resposta, 401, "Autenticação necessária");
@@ -48,24 +45,20 @@ async function verificarLogin(requisicao: RequisicaoAutenticada, resposta: Respo
   }
 }
 
-/** Permite continuar somente quando o usuário conectado é administrador. */
 function verificarAdministrador(requisicao: RequisicaoAutenticada, resposta: Response, proximo: () => void) {
   if (requisicao.usuario?.tipo !== "admin") return enviarErro(resposta, 403, "Acesso restrito ao administrador");
   proximo();
 }
 
-/** Remove a senha antes de enviar os dados do usuário ao navegador. */
 function usuarioPublico(usuario: NonNullable<UsuarioLocal>) {
   const { senha: _senha, ...dados } = usuario;
   return dados;
 }
 
-/** Converte o preço Decimal do Prisma para um número comum no JSON. */
 function pacotePublico<T extends { preco: { toString(): string } }>(pacote: T) {
   return { ...pacote, preco: Number(pacote.preco) };
 }
 
-/** Organiza os campos recebidos ao criar ou editar um pacote. */
 export function normalizarPacote(entrada: Record<string, unknown>) {
   return {
     titulo: String(entrada.titulo || "").trim(),
@@ -79,12 +72,10 @@ export function normalizarPacote(entrada: Record<string, unknown>) {
   };
 }
 
-/** Verifica se os dados mínimos de um pacote foram preenchidos corretamente. */
 export function pacoteValido(pacote: ReturnType<typeof normalizarPacote>) {
   return Boolean(pacote.titulo && pacote.descricao && pacote.destino && pacote.duracaoDias >= 1 && Number(pacote.preco) > 0);
 }
 
-/** Registra todas as rotas simples usadas pelo sistema de turismo. */
 export function registrarRotas(app: Express) {
   app.get("/api/usuarios/setup", async (_requisicao, resposta) => {
     const email = process.env.ADMIN_DEFAULT_EMAIL || "admin@adventure.tur.br";

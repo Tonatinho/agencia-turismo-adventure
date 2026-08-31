@@ -22,7 +22,6 @@ export default function Home() {
   const featured = filtered.filter((item) => item.destaque).slice(0, 3);
   const visible = featured.length ? featured : filtered.slice(0, 6);
 
-  /** Envia ao backend a solicitação de reserva do pacote selecionado. */
   async function reserve(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!user) { setNotice("Entre na sua conta para solicitar uma reserva."); return; }

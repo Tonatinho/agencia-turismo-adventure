@@ -4,7 +4,6 @@ import Entrar from "./paginas/Entrar";
 import Administracao from "./paginas/Administracao";
 import NaoEncontrado from "./paginas/NaoEncontrado";
 
-/** Define as páginas que podem ser acessadas no site. */
 export default function Aplicacao() {
   return (
     <BrowserRouter>

@@ -4,7 +4,6 @@ import { api, Pacote, Reserva, Usuario } from "@/servicos/api";
 
 const formularioVazio = { titulo: "", descricao: "", destino: "", preco: "", duracaoDias: 1, imagem: "", destaque: false };
 
-/** Permite ao administrador cadastrar pacotes e acompanhar reservas. */
 export default function Administracao() {
   const navegar = useNavigate();
   const [usuario, setUsuario] = useState<Usuario | null>(null);
@@ -13,7 +12,6 @@ export default function Administracao() {
   const [formulario, setFormulario] = useState(formularioVazio);
   const [mensagem, setMensagem] = useState("");
 
-  /** Carrega os dados do painel e impede o acesso de usuários comuns. */
   useEffect(() => {
     api.usuarioAtual().then(({ usuario: atual }) => {
       if (atual.tipo !== "admin") return navegar("/");
@@ -23,7 +21,6 @@ export default function Administracao() {
     }).catch(() => navegar("/login"));
   }, [navegar]);
 
-  /** Salva um novo pacote usando os campos preenchidos no formulário. */
   async function salvarPacote(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
     try {
@@ -36,13 +33,11 @@ export default function Administracao() {
     }
   }
 
-  /** Altera o status de uma reserva escolhida pelo administrador. */
   async function mudarStatus(id: number, status: Reserva["status"]) {
     await api.atualizarStatusReserva(id, status);
     setReservas((lista) => lista.map((reserva) => reserva.id === id ? { ...reserva, status } : reserva));
   }
 
-  /** Arquiva um pacote para que ele não apareça mais na vitrine. */
   async function arquivarPacote(id: number) {
     if (!confirm("Arquivar este pacote?")) return;
     await api.arquivarPacote(id);

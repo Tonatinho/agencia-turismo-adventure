@@ -5,7 +5,6 @@ import { type Server } from "node:http";
 import { createServer as criarServidorVite } from "vite";
 import configuracaoVite from "../../vite.config";
 
-/** Configura o Vite para entregar o React durante o desenvolvimento. */
 export async function configurarVite(app: Express, servidor: Server) {
   const vite = await criarServidorVite({
     ...configuracaoVite,
@@ -28,7 +27,6 @@ export async function configurarVite(app: Express, servidor: Server) {
   });
 }
 
-/** Entrega os arquivos gerados pelo React quando o projeto está em produção. */
 export function servirArquivos(app: Express) {
   const pastaPublica = path.resolve(import.meta.dirname, "../..", "dist", "public");
   app.use(express.static(pastaPublica));

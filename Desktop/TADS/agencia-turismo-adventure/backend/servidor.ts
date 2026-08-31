@@ -5,7 +5,6 @@ import { createServer } from "node:http";
 import { registrarRotas } from "./rotas/api";
 import { configurarVite, servirArquivos } from "./config/vite";
 
-/** Inicia o Express, as rotas da API e a interface React. */
 async function iniciarServidor() {
   const app = express();
   const servidor = createServer(app);

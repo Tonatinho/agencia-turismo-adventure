@@ -1,4 +1,3 @@
--- CreateTable
 CREATE TABLE `users` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `openId` VARCHAR(64) NOT NULL,
@@ -14,7 +13,6 @@ CREATE TABLE `users` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- CreateTable
 CREATE TABLE `usuarios` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `nome` VARCHAR(191) NOT NULL,
@@ -29,7 +27,6 @@ CREATE TABLE `usuarios` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- CreateTable
 CREATE TABLE `pacotes` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `titulo` VARCHAR(191) NOT NULL,
@@ -46,7 +43,6 @@ CREATE TABLE `pacotes` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- CreateTable
 CREATE TABLE `reservas` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `usuarioId` INTEGER NOT NULL,
@@ -64,9 +60,6 @@ CREATE TABLE `reservas` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- AddForeignKey
 ALTER TABLE `reservas` ADD CONSTRAINT `reservas_usuarioId_fkey` FOREIGN KEY (`usuarioId`) REFERENCES `usuarios`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE `reservas` ADD CONSTRAINT `reservas_pacoteId_fkey` FOREIGN KEY (`pacoteId`) REFERENCES `pacotes`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
